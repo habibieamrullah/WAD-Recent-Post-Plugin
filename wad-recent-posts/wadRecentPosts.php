@@ -37,41 +37,48 @@ class WAD_Recent_Posts extends WP_Widget {
 		extract( wp_parse_args( ( array ) $instance, $defaults ) ); ?>
 
 		<?php // Widget Title ?>
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title', 'text_domain' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
-		</p>
-		
-		<?php // Max Post ?>
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'maxpost' ) ); ?>"><?php _e( 'Maximum Post Count', 'text_domain' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'maxpost' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'maxpost' ) ); ?>" type="text" value="<?php echo esc_attr( $maxpost ); ?>" />
-		</p>
+		<div style="margin-bottom: 20px;">
+			<div>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title', 'text_domain' ); ?></label>
+				<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+			</div>
+			
+			<?php // Max Post ?>
+			<br>
+			<div>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'maxpost' ) ); ?>"><?php _e( 'Maximum Post Count', 'text_domain' ); ?></label>
+				<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'maxpost' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'maxpost' ) ); ?>" type="text" value="<?php echo esc_attr( $maxpost ); ?>" />
+			</div>
 
-		<?php 
-		// Dropdown 
-		?>
-		
-		<div>
-			<p>Your selected cat is: <?php echo esc_attr( $catid ); ?></p>
-			<label for="<?php echo $this->get_field_id( 'catid' ); ?>"><?php _e( 'Select a Category', 'text_domain' ); ?></label>
-			<select name="<?php echo $this->get_field_name( 'catid' ); ?>" id="<?php echo $this->get_field_id( 'catid' ); ?>" class="widefat">
-			
-			<?php
-			
-			$categories = get_categories( array(
-				'orderby' => 'name',
-				'order'   => 'ASC'
-			) );
-			 
-			foreach( $categories as $category ) {
-				?>
-				<option value="<?php echo get_cat_ID($category->name) ?>"><?php echo $category->name ?></option>
-				<?php
-			}
-			
+			<?php 
+			// Dropdown 
 			?>
-			</select>
+			<br>
+			<div>
+				<label for="<?php echo $this->get_field_id( 'catid' ); ?>"><?php _e( 'Select a Category', 'text_domain' ); ?></label>
+				<select name="<?php echo $this->get_field_name( 'catid' ); ?>" id="<?php echo $this->get_field_id( 'catid' ); ?>" class="widefat">
+				
+				<?php
+				
+				$categories = get_categories( array(
+					'orderby' => 'name',
+					'order'   => 'ASC'
+				) );
+				 
+				foreach( $categories as $category ) {
+					if(get_cat_ID($category->name) == esc_attr( $catid )){
+						?>
+						<option value="<?php echo get_cat_ID($category->name) ?>" selected><?php echo $category->name ?></option>
+						<?php
+					}else{
+						?>
+						<option value="<?php echo get_cat_ID($category->name) ?>"><?php echo $category->name ?></option>
+						<?php
+					}
+				}
+				?>
+				</select>
+			</div>
 		</div>
 		<?php
 	}
@@ -111,12 +118,22 @@ class WAD_Recent_Posts extends WP_Widget {
 		
 		<ul>
 			<?php
+			$currentpost = 0;
 			while (have_posts()) { 
-				the_post(); ?>
-				<li>
-					<?php echo get_the_title() . " link: " . get_permalink() . " cat id " . get_cat_name(the_category_ID()) . " category link: " . get_category_link(the_category_ID()) . " post exerpt: " . get_the_excerpt() ?>
-				</li>
-				<?php 
+				the_post(); 
+				if($currentpost < $maxpost){
+					?>
+					<li>
+						<?php
+						
+						echo "Wakwaaaak";
+						
+						//echo get_the_title() . " link: " . get_permalink() . " cat id " . get_cat_name(the_category_ID()) . " category link: " . get_category_link(the_category_ID()) . " post exerpt: " . get_the_excerpt() 
+						?>
+					</li>
+					<?php 
+				}
+				$currentpost++;
 			} // while() 
 			?>
 		</ul>
