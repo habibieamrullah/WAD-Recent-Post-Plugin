@@ -3,10 +3,12 @@
 Plugin Name: WAD Recent Posts
 Plugin URI: https://webappdev.my.id/
 Description: Recent posts list widget.
-Version: 1.0.0
+Version: 1.0.1
 Author: WebAppDev
 Author URI: https://webappdev.my.id/
 License: GPL2
+Requires at least: 2.9
+Requires PHP:      5.2
 */
 
 
@@ -111,34 +113,60 @@ class WAD_Recent_Posts extends WP_Widget {
 		if ( $title ) {
 			echo $before_title . $title . $after_title;
 		}
-
+		
 		?>
-		
-		<h1>Selected Cat: <?php echo $catid ?></h1>
-		
-		<ul>
+		<div style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
 			<?php
-			$currentpost = 0;
-			while (have_posts()) { 
-				the_post(); 
-				if($currentpost < $maxpost){
-					?>
-					<li>
-						<?php
-						
-						echo "Wakwaaaak";
-						
-						//echo get_the_title() . " link: " . get_permalink() . " cat id " . get_cat_name(the_category_ID()) . " category link: " . get_category_link(the_category_ID()) . " post exerpt: " . get_the_excerpt() 
-						?>
-					</li>
-					<?php 
-				}
-				$currentpost++;
-			} // while() 
-			?>
-		</ul>
-		<?php
+			$args = array(
+			  'post_type' => 'post' ,
+			  'orderby' => 'date' ,
+			  'order' => 'DESC' ,
+			  'posts_per_page' => $maxpost,
+			  'cat'         => $catid,
+			  'paged' => get_query_var('paged'),
+			  'post_parent' => $parent
+			); 
+			
+			$q = new WP_Query($args);
+			
 
+
+			while ($q->have_posts()) { 
+				$q->the_post(); 
+				
+				if(get_the_category()[0]->term_id == $catid){
+					?>
+					<a href="<?php echo get_permalink() ?>">
+						<div style="display: table; width: 100%; table-layout: fixed; margin-bottom: 10px;">
+							<?php
+							if(get_the_post_thumbnail_url() != ""){
+								?>
+								<div style="display: table-cell; width: 92px; background: url(<?php echo get_the_post_thumbnail_url(); ?>) no-repeat center center; background-size: cover; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover;">
+								</div>
+								<?php
+							}
+							?>
+							<div style="display: table-cell; text-align: left; padding-left: 10px;">
+								<h3 style="font-size: 16px; margin: 0px;"><?php echo shorten_text(get_the_title(), 32) ?></h3>
+								<div style="display: inline-block; font-size: 10px; background-color: #9a0000; color: white; padding: 3px; margin; 3px;"><?php echo get_the_date() ?></div>
+								<p style="margin: 0px; font-size: 14px;"><?php echo shorten_text(get_the_excerpt(), 64) ?></p>
+							</div>
+							<?php
+							//echo get_the_title() . " link: " . get_permalink() . " cat id " . get_cat_name(the_category_ID()) . " category link: " . get_category_link(the_category_ID()) . " post exerpt: " . get_the_excerpt(); 
+							?>
+						</div>
+					</a>
+					<?php 
+					
+				}
+
+			} 
+			
+			?>
+			<div align="center" style="color: #9a0000; padding: 10px;"><a href="<?php echo get_category_link($catid) ?>">Arsip <?php echo $title ?>...</a></div>
+		</div>
+		<?php
+		
 		// WordPress core after_widget hook (always include )
 		echo $after_widget;
 	}
@@ -151,3 +179,28 @@ function register_wad_recent_posts() {
 }
 
 add_action( 'widgets_init', 'register_wad_recent_posts' );
+
+function shorten_text($text, $max_length = 140, $cut_off = '...', $keep_word = false)
+{
+    if(strlen($text) <= $max_length) {
+        return $text;
+    }
+
+    if(strlen($text) > $max_length) {
+        if($keep_word) {
+            $text = substr($text, 0, $max_length + 1);
+
+            if($last_space = strrpos($text, ' ')) {
+                $text = substr($text, 0, $last_space);
+                $text = rtrim($text);
+                $text .=  $cut_off;
+            }
+        } else {
+            $text = substr($text, 0, $max_length);
+            $text = rtrim($text);
+            $text .=  $cut_off;
+        }
+    }
+
+    return $text;
+}
