@@ -1,0 +1,48 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-26 10:06+0700\n"
+"PO-Revision-Date: 2021-01-29 07:33+0700\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: id\n"
+
+#: wadRecentPosts.php:23
+msgid "WAD Recent Posts"
+msgstr "WAD Postingan Terakhir"
+
+#: wadRecentPosts.php:45
+msgid "Title"
+msgstr "Judul"
+
+#: wadRecentPosts.php:52
+msgid "Maximum Post Count"
+msgstr "Jumlah Postingan"
+
+#: wadRecentPosts.php:61
+msgid "Select a Category"
+msgstr "Pilih Kategori"
+
+#: wadRecentPosts.php:167
+msgid "Archive of "
+msgstr "Arsip "
+
+msgid "Accent Color (color hex code)"
+msgstr "Warna gaya (kode hex warna)"
+
+msgid "All Categories"
+msgstr "Semua Kategori"
+
+msgid "Recent posts in this category:"
+msgstr "Artikel terakhir di kategori ini:"
